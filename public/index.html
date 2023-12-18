@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>ok!!</h1>
+</body>
+</html>
+<script>
+    let h1=document.querySelector("h1");
+    h1.addEventListener("click",(e)=>{
+        e.preventDefault();
+        const user=[
+            {userId:'65803bc8a0195b43c6d84d8c'},
+            {userId:'65803b633d86994cc7c92f05'},
+            {userId:'65803a9ea733a88c06ef38ff'}
+        ]
+        fetch('/addContact/658030612247ba081110ddc4',{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(user)
+        }).then ((r)=>{
+            return r.json();
+        }).then((data)=>{
+            console.log(data);
+        }).catch((err)=>{
+            console.log(err)
+        })
+    })
+</script>
