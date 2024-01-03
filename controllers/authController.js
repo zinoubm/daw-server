@@ -6,12 +6,22 @@ const {
   deleteUser: crudDeleteUser,
 } = require("../crud/crudUser");
 
+const { hashedPassword } = require("../utils");
+
 const { createSession, deldeleteSession } = require("../crud/crudSession");
 const { deleteSession } = require("../crud/crudSession");
 
 const registerAdmin = async (req, res) => {
-  const { Nom, Prenom, Gener, dt_Naiss, email, password, Autorisation ,avatar } =
-    req.body;
+  const {
+    Nom,
+    Prenom,
+    Gener,
+    dt_Naiss,
+    email,
+    password,
+    Autorisation,
+    avatar,
+  } = req.body;
 
   const user = await getUserByEmail(email);
 
@@ -26,9 +36,9 @@ const registerAdmin = async (req, res) => {
       Gener: Gener,
       dt_Naiss: new Date(dt_Naiss),
       email: email,
-      password: password,
+      password: hashedPassword(password),
       is_accepte: false,
-      avatar
+      avatar,
     },
     {
       Role: "ADMIN",
@@ -67,14 +77,14 @@ const registerDoctor = async (req, res) => {
       Gener: Gener,
       dt_Naiss: new Date(dt_Naiss),
       email: email,
-      password: password,
+      password: hashedPassword(password),
       Specilite: Specilite,
       is_accepte: false,
     },
     {
       Specilite: Specilite,
-      Sess_thrp_plnf: ''/*Sess_thrp_plnf*/,
-      med_atrbs: ''/*med_atrbs*/,
+      Sess_thrp_plnf: "" /*Sess_thrp_plnf*/,
+      med_atrbs: "" /*med_atrbs*/,
     }
   );
 
@@ -114,18 +124,18 @@ const registerPatient = async (req, res) => {
       Gener: Gener,
       dt_Naiss: new Date(dt_Naiss),
       email: email,
-      password: password,
+      password: hashedPassword(password),
       is_accepte: false,
     },
     {
-      niveau_dadd:'',// niveau_dadd,
-      moyenne_dheur:'',// moyenne_dheur,
-      moyenne_dMoinsj:'',// moyenne_dMoinsj,
-      score_dinsom:'',// score_dinsom,
-      score_somlnc:'',// score_somlnc,
-      score_danxi:'',// score_danxi,
-      score_dépr:'',// score_dépr,
-      autres_attrpat:'',// autres_attrpat,
+      niveau_dadd: "", // niveau_dadd,
+      moyenne_dheur: "", // moyenne_dheur,
+      moyenne_dMoinsj: "", // moyenne_dMoinsj,
+      score_dinsom: "", // score_dinsom,
+      score_somlnc: "", // score_somlnc,
+      score_danxi: "", // score_danxi,
+      score_dépr: "", // score_dépr,
+      autres_attrpat: "", // autres_attrpat,
     }
   );
 
@@ -143,7 +153,7 @@ const login = async (req, res) => {
       .status(404)
       .json({ error: "Couldn't find a user with this email!" });
 
-  if (user.password !== password)
+  if (user.password !== hashedPassword(password))
     return res.status(404).json({ error: "Wrong password!" });
 
   const session = await createSession(user._id);
